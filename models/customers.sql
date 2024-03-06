@@ -34,7 +34,7 @@ customer_payments as (
 
     select
         orders.customer_id,
-        sum(amount) as total_amount
+        sum(amount) as customer_lifetime_value,
 
     from payments
 
@@ -48,13 +48,13 @@ customer_payments as (
 final as (
 
     select
-        customers.customer_id,
-        customers.first_name,
-        customers.last_name,
-        customer_orders.first_order,
-        customer_orders.most_recent_order,
-        customer_orders.number_of_orders,
-        customer_payments.total_amount as customer_lifetime_value
+        customers.customer_id::int,
+        customers.first_name::str,
+        customers.last_name::str,
+        customer_orders.first_order::date,
+        customer_orders.most_recent_order::date,
+        customer_orders.number_of_orders::int,
+        customer_payments.customer_lifetime_value::int
 
     from customers
 

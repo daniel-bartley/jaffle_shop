@@ -17,10 +17,12 @@ order_payments as (
     select
         order_id,
 
-        {% for payment_method in payment_methods -%}
-        sum(case when payment_method = '{{ payment_method }}' then amount else 0 end) as {{ payment_method }}_amount,
-        {% endfor -%}
+        {# /* sqlmesh had some trouble with the jinja for loop that was here. */ #}
 
+        sum(case when payment_method = 'credit_card' then amount else 0 end) as credit_card_amount,
+        sum(case when payment_method = 'coupon' then amount else 0 end) as coupon_amount,
+        sum(case when payment_method = 'bank_transfer' then amount else 0 end) as bank_transfer_amount,
+        sum(case when payment_method = 'gift_card' then amount else 0 end) as gift_card_amount,
         sum(amount) as total_amount
 
     from payments
@@ -32,18 +34,16 @@ order_payments as (
 final as (
 
     select
-        orders.order_id,
-        orders.customer_id,
-        orders.order_date,
-        orders.status,
+        orders.order_id::int,
+        orders.customer_id::int,
+        orders.order_date::date,
+        orders.status::str,
 
-        {% for payment_method in payment_methods -%}
-
-        order_payments.{{ payment_method }}_amount,
-
-        {% endfor -%}
-
-        order_payments.total_amount as amount
+        order_payments.credit_card_amount::int,
+        order_payments.coupon_amount::int,
+        order_payments.bank_transfer_amount::int,
+        order_payments.gift_card_amount::int,
+        order_payments.total_amount::int
 
     from orders
 
