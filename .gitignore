@@ -3,3 +3,9 @@ target/
 dbt_modules/
 logs/
 **/.DS_Store
+
+# dbt
+.user.yml
+
+# sqlmesh
+.cache

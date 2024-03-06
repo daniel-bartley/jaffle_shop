@@ -1,0 +1,18 @@
+jaffle_shop:
+  config:
+    send_anonymous_usage_stats: false
+  target: default
+  outputs:
+    default:
+      type: bigquery
+      method: oauth
+      project: "{{ env_var('GOOGLE_PROJECT_ID') }}"
+      dataset: "{{ env_var('USER_NAME') }}_bq"
+      threads: 1
+      location: US
+      priority: interactive
+      retries: 0
+      scopes:
+        - https://www.googleapis.com/auth/bigquery
+        - https://www.googleapis.com/auth/cloud-platform
+        - https://www.googleapis.com/auth/drive

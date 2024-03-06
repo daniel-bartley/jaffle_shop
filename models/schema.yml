@@ -51,7 +51,10 @@ models:
         description: Date (UTC) that the order was placed
 
       - name: status
-        description: '{{ doc("orders_status") }}'
+        description: logistics status of the order.
+        # '{{ doc("orders_status") }}'
+        # markdown comments work for dbt docs but not BigQuery
+        # bigquery has column description maximum length of 1024 characters.
         tests:
           - accepted_values:
               values: ['placed', 'shipped', 'completed', 'return_pending', 'returned']
